@@ -1,0 +1,1 @@
+{"train_dir": "../data/COVID_19_dataset/train", "val_dir": "../data/COVID_19_dataset/val", "test_dir": "../data/COVID_19_dataset/test", "batch_size": 32, "mean": [0.5159, 0.5159, 0.5159], "std": [0.228, 0.228, 0.228]}
