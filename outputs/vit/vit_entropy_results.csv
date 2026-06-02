@@ -1,0 +1,68 @@
+file,entropy,true,pred,category
+mask_true_COVID_pred_COVID_0.npy,9.491491,COVID,COVID,Correct
+mask_true_COVID_pred_COVID_1.npy,9.52152,COVID,COVID,Correct
+mask_true_COVID_pred_COVID_10.npy,9.329475,COVID,COVID,Correct
+mask_true_COVID_pred_COVID_11.npy,9.295297,COVID,COVID,Correct
+mask_true_COVID_pred_COVID_12.npy,9.246368,COVID,COVID,Correct
+mask_true_COVID_pred_COVID_13.npy,9.378694,COVID,COVID,Correct
+mask_true_COVID_pred_COVID_14.npy,9.425018,COVID,COVID,Correct
+mask_true_COVID_pred_COVID_15.npy,9.513369,COVID,COVID,Correct
+mask_true_COVID_pred_COVID_2.npy,9.560867,COVID,COVID,Correct
+mask_true_COVID_pred_COVID_3.npy,9.349504,COVID,COVID,Correct
+mask_true_COVID_pred_COVID_4.npy,9.477106,COVID,COVID,Correct
+mask_true_COVID_pred_COVID_5.npy,9.399168,COVID,COVID,Correct
+mask_true_COVID_pred_COVID_6.npy,9.4372425,COVID,COVID,Correct
+mask_true_COVID_pred_COVID_7.npy,9.365662,COVID,COVID,Correct
+mask_true_COVID_pred_COVID_8.npy,9.333065,COVID,COVID,Correct
+mask_true_COVID_pred_COVID_9.npy,9.3303795,COVID,COVID,Correct
+mask_true_COVID_pred_Normal_0.npy,9.265062,COVID,Normal,Misclassified
+mask_true_COVID_pred_Normal_10.npy,9.337731,COVID,Normal,Misclassified
+mask_true_COVID_pred_Normal_11.npy,9.422726,COVID,Normal,Misclassified
+mask_true_COVID_pred_Normal_12.npy,9.415252,COVID,Normal,Misclassified
+mask_true_COVID_pred_Normal_13.npy,9.380852,COVID,Normal,Misclassified
+mask_true_COVID_pred_Normal_14.npy,9.510145,COVID,Normal,Misclassified
+mask_true_COVID_pred_Normal_15.npy,9.269636,COVID,Normal,Misclassified
+mask_true_COVID_pred_Normal_2.npy,9.5431595,COVID,Normal,Misclassified
+mask_true_COVID_pred_Normal_3.npy,9.456062,COVID,Normal,Misclassified
+mask_true_COVID_pred_Normal_4.npy,9.521189,COVID,Normal,Misclassified
+mask_true_COVID_pred_Normal_5.npy,9.133938,COVID,Normal,Misclassified
+mask_true_COVID_pred_Normal_6.npy,9.4188,COVID,Normal,Misclassified
+mask_true_COVID_pred_Normal_7.npy,9.520811,COVID,Normal,Misclassified
+mask_true_COVID_pred_Normal_8.npy,9.261106,COVID,Normal,Misclassified
+mask_true_COVID_pred_Normal_9.npy,9.223286,COVID,Normal,Misclassified
+mask_true_Normal_pred_COVID_12.npy,9.609501,Normal,COVID,Misclassified
+mask_true_Normal_pred_Normal_0.npy,9.336475,Normal,Normal,Correct
+mask_true_Normal_pred_Normal_1.npy,9.412169,Normal,Normal,Correct
+mask_true_Normal_pred_Normal_10.npy,9.240708,Normal,Normal,Correct
+mask_true_Normal_pred_Normal_11.npy,9.507971,Normal,Normal,Correct
+mask_true_Normal_pred_Normal_12.npy,9.278149,Normal,Normal,Correct
+mask_true_Normal_pred_Normal_13.npy,9.274359,Normal,Normal,Correct
+mask_true_Normal_pred_Normal_14.npy,9.346568,Normal,Normal,Correct
+mask_true_Normal_pred_Normal_15.npy,9.2870035,Normal,Normal,Correct
+mask_true_Normal_pred_Normal_2.npy,9.264809,Normal,Normal,Correct
+mask_true_Normal_pred_Normal_3.npy,9.498732,Normal,Normal,Correct
+mask_true_Normal_pred_Normal_4.npy,9.497145,Normal,Normal,Correct
+mask_true_Normal_pred_Normal_5.npy,9.412851,Normal,Normal,Correct
+mask_true_Normal_pred_Normal_6.npy,9.453323,Normal,Normal,Correct
+mask_true_Normal_pred_Normal_7.npy,9.330074,Normal,Normal,Correct
+mask_true_Normal_pred_Normal_8.npy,9.333518,Normal,Normal,Correct
+mask_true_Normal_pred_Normal_9.npy,9.154933,Normal,Normal,Correct
+mask_true_Normal_pred_Viral Pneumonia_1.npy,9.461416,Normal,Viral Pneumonia,Misclassified
+mask_true_Normal_pred_Viral Pneumonia_11.npy,9.426695,Normal,Viral Pneumonia,Misclassified
+mask_true_Normal_pred_Viral Pneumonia_3.npy,9.37982,Normal,Viral Pneumonia,Misclassified
+mask_true_Normal_pred_Viral Pneumonia_4.npy,9.421392,Normal,Viral Pneumonia,Misclassified
+mask_true_Normal_pred_Viral Pneumonia_7.npy,9.434504,Normal,Viral Pneumonia,Misclassified
+mask_true_Viral Pneumonia_pred_Viral Pneumonia_10.npy,9.441032,Viral Pneumonia,Viral Pneumonia,Correct
+mask_true_Viral Pneumonia_pred_Viral Pneumonia_11.npy,9.428545,Viral Pneumonia,Viral Pneumonia,Correct
+mask_true_Viral Pneumonia_pred_Viral Pneumonia_12.npy,9.451597,Viral Pneumonia,Viral Pneumonia,Correct
+mask_true_Viral Pneumonia_pred_Viral Pneumonia_13.npy,9.543028,Viral Pneumonia,Viral Pneumonia,Correct
+mask_true_Viral Pneumonia_pred_Viral Pneumonia_14.npy,9.258709,Viral Pneumonia,Viral Pneumonia,Correct
+mask_true_Viral Pneumonia_pred_Viral Pneumonia_15.npy,9.564897,Viral Pneumonia,Viral Pneumonia,Correct
+mask_true_Viral Pneumonia_pred_Viral Pneumonia_2.npy,9.426844,Viral Pneumonia,Viral Pneumonia,Correct
+mask_true_Viral Pneumonia_pred_Viral Pneumonia_3.npy,9.521599,Viral Pneumonia,Viral Pneumonia,Correct
+mask_true_Viral Pneumonia_pred_Viral Pneumonia_4.npy,9.441225,Viral Pneumonia,Viral Pneumonia,Correct
+mask_true_Viral Pneumonia_pred_Viral Pneumonia_5.npy,9.407219,Viral Pneumonia,Viral Pneumonia,Correct
+mask_true_Viral Pneumonia_pred_Viral Pneumonia_6.npy,9.57091,Viral Pneumonia,Viral Pneumonia,Correct
+mask_true_Viral Pneumonia_pred_Viral Pneumonia_7.npy,9.528262,Viral Pneumonia,Viral Pneumonia,Correct
+mask_true_Viral Pneumonia_pred_Viral Pneumonia_8.npy,9.546433,Viral Pneumonia,Viral Pneumonia,Correct
+mask_true_Viral Pneumonia_pred_Viral Pneumonia_9.npy,9.504292,Viral Pneumonia,Viral Pneumonia,Correct

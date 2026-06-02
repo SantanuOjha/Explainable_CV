@@ -74,20 +74,222 @@ The Grad-CAM analysis demonstrated that the ResNet50 model generally focused on 
 
 Several failure cases exhibited weak or dispersed activations, indicating that subtle pathological manifestations, low image contrast, and imaging artifacts contributed to incorrect predictions. Importantly, the Grad-CAM visualizations confirmed that the model primarily attended to anatomically meaningful lung structures instead of irrelevant background regions, supporting the reliability and interpretability of the classification pipeline.
 
-# Reason for Freezing ViT-B/16 Backbone During Training
+---
 
-The Vision Transformer (ViT-B/16) architecture contains a significantly larger number of trainable parameters compared to conventional convolutional neural networks such as ResNet50. Full fine-tuning of the transformer backbone requires substantial computational resources, memory, and training time, particularly on laptop GPUs.
+# Vision Transformer (ViT-B/16)
 
-To make the training process computationally efficient while preserving the explainability objectives of the project, the pretrained transformer backbone was frozen and only the final classification head was trained. This transfer learning strategy allows the model to retain the generalized visual representations learned from ImageNet while adapting the classifier to the chest X-ray dataset.
+## Motivation
 
-The primary goal of the internship project is explainability analysis rather than achieving marginal improvements in classification accuracy. Therefore, reducing training complexity while maintaining strong predictive performance was considered an appropriate design decision.
+To extend the explainability analysis beyond CNN-based localization methods, a Vision Transformer (ViT-B/16) architecture was implemented for comparative transformer-based interpretability analysis.
 
-This approach provided several advantages:
+The primary objective was not only classification performance but also understanding how transformer attention mechanisms behave on medical imaging data.
 
-- Reduced training time and GPU memory consumption.
-- Improved training stability on limited hardware resources.
-- Prevention of excessive overfitting on a relatively small medical imaging dataset.
-- Preservation of pretrained semantic feature representations.
-- Faster experimentation for explainability analysis using Attention Rollout.
+---
 
-The frozen-backbone strategy enabled efficient comparison between CNN-based Grad-CAM explanations and transformer-based attention visualizations within practical computational constraints.
+# ViT-B/16 Training Strategy
+
+Initially, full fine-tuning of the ViT-B/16 backbone was attempted. However, training proved computationally expensive on laptop GPU hardware.
+
+Observed:
+
+- Approximately 1 hour for only 2 epochs
+- High GPU memory consumption
+- Slow convergence
+
+To improve computational efficiency while preserving explainability capability, the transformer backbone was frozen and only the classification head was trained.
+
+```python
+for param in model.parameters():
+    param.requires_grad = False
+
+for param in model.heads.parameters():
+    param.requires_grad = True
+```
+
+---
+
+# Why Freeze the Backbone?
+
+The frozen-backbone strategy was selected because the project primarily focuses on explainability analysis rather than maximizing benchmark accuracy.
+
+Advantages of this approach:
+
+- Reduced training time
+- Lower GPU memory consumption
+- Improved training stability
+- Reduced overfitting risk
+- Faster experimentation for explainability analysis
+- Preservation of pretrained ImageNet representations
+
+---
+
+# ViT-B/16 Configuration
+
+| Parameter         | Value   |
+| ----------------- | ------- |
+| Image Size        | 224×224 |
+| Optimizer         | Adam    |
+| Learning Rate     | 1e-3    |
+| Epochs            | 10      |
+| Backbone          | Frozen  |
+| Transfer Learning | Yes     |
+
+---
+
+# ViT-B/16 Results
+
+## Classification Report
+
+| Class           | Precision | Recall | F1-Score |
+| --------------- | --------- | ------ | -------- |
+| COVID           | 0.98      | 0.83   | 0.90     |
+| Normal          | 0.85      | 0.96   | 0.90     |
+| Viral Pneumonia | 0.98      | 0.99   | 0.99     |
+
+---
+
+## Overall Metrics
+
+| Metric          | Score |
+| --------------- | ----- |
+| Accuracy        | 93%   |
+| Macro Avg F1    | 0.93  |
+| Weighted Avg F1 | 0.93  |
+
+---
+
+# ViT Learning Curves
+
+## Loss Curve
+
+![ViT Loss Curve](outputs/vit/vit_loss_curve.png)
+
+---
+
+## Accuracy Curve
+
+![ViT Accuracy Curve](outputs/vit/vit_accuracy_curve.png)
+
+---
+
+# ViT Confusion Matrix
+
+![ViT Confusion Matrix](outputs/vit/vit_confusion_matrix.png)
+
+---
+
+# Comparative Insights
+
+## ResNet50 + Grad-CAM
+
+Strengths:
+
+- Strong spatial localization
+- Clear pulmonary attention regions
+- Computationally efficient
+
+Limitations:
+
+- Limited global contextual understanding
+- Sensitive to overlapping respiratory patterns
+
+---
+
+## ViT-B/16 + Attention Rollout
+
+Strengths:
+
+- Global attention modeling
+- Better contextual feature understanding
+- Transformer interpretability analysis
+
+Limitations:
+
+- Computationally expensive
+- Slower convergence
+- Requires larger datasets for optimal performance
+
+---
+
+# Explainable AI Perspective
+
+The project evolved from a standard medical image classification pipeline into a research-oriented Explainable AI framework focused on understanding:
+
+- Model decision behavior
+- Failure cases
+- Attention mechanisms
+- CNN vs Transformer interpretability
+
+Rather than only maximizing classification accuracy, the project emphasizes understanding _why_ predictions are made.
+
+---
+
+# Saved Outputs
+
+```text
+outputs/
+│
+├── gradcam/
+│
+├── vit/
+│   ├── best_vit_model.pth
+│   ├── final_vit_model.pth
+│   ├── vit_loss_curve.png
+│   ├── vit_accuracy_curve.png
+│   ├── vit_confusion_matrix.png
+│   ├── vit_metrics.json
+│   ├── vit_classification_report.txt
+│   ├── vit_predictions.csv
+│   ├── misclassified/
+│   └── attention_rollout/
+```
+
+---
+
+# Repository Structure
+
+```text
+project/
+│
+├── notebooks/
+│   ├── EDA.ipynb
+│   ├── preprocessing.ipynb
+│   ├── resnet50_training.ipynb
+│   ├── gradcam_analysis.ipynb
+│   ├── vit_training.ipynb
+│   ├── attention_rollout.ipynb
+│   └── evaluation.ipynb
+│
+├── outputs/
+│
+├── README.md
+│
+└── requirements.txt
+```
+
+---
+
+# Future Work
+
+Planned improvements:
+
+- Attention Rollout implementation
+- Quantitative explainability evaluation
+- Clinical relevance validation
+- Transformer attention comparison
+- Multi-label pathology classification
+- Research paper preparation
+
+---
+
+# Key Research Contribution
+
+The major contribution of this work is the comparative explainability analysis between:
+
+- CNN-based Grad-CAM visualizations
+  and
+- Transformer-based Attention Rollout methods
+
+for chest X-ray classification.
+
+The project demonstrates how Explainable AI techniques can help interpret deep learning behavior in medical imaging systems.

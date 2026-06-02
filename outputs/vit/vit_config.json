@@ -1,0 +1,9 @@
+{
+    "model": "ViT-B/16",
+    "image_size": 224,
+    "batch_size": 16,
+    "epochs": 10,
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "frozen_backbone": true
+}
