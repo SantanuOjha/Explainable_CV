@@ -33,7 +33,7 @@ from chest X-ray images.
 
 # Research Motivation
 
-Explainable Computer Vision aims to make deep learning models transparent and interpretable, especially in high-stakes domains such as healthcare where incorrect predictions may lead to serious consequences. :contentReference[oaicite:1]{index=1}
+Explainable Computer Vision aims to make deep learning models transparent and interpretable, especially in high-stakes domains such as healthcare where incorrect predictions may lead to serious consequences.
 
 Medical imaging systems must not only produce predictions, but also explain:
 
@@ -193,7 +193,7 @@ This allowed extraction of transformer attention maps for rollout computation.
 
 # Explainability Evaluation Metrics
 
-The project evaluates saliency quality using multiple quantitative explainability metrics proposed in the internship assignment. :contentReference[oaicite:2]{index=2}
+The project evaluates saliency quality using multiple quantitative explainability metrics proposed in the internship assignment.
 
 ## Metrics Used
 
@@ -445,7 +445,7 @@ The project demonstrates how Explainable AI techniques can help interpret deep l
 Developed for:
 
 **AIMS DTU Research Internship 2026**  
-**Explainable Computer Vision Track** :contentReference[oaicite:3]{index=3}
+**Explainable Computer Vision Track**
 
 The project fulfills the internship requirements of:
 
