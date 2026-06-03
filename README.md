@@ -1,102 +1,138 @@
-# Explainable_CV
+# Explainable Computer Vision for Chest X-Ray Classification
 
-# Results for ResNet50 ( Frozen )
+A comparative Explainable AI (XAI) framework for chest X-ray classification using:
 
-| Metric    | Value  |
-| --------- | ------ |
-| Accuracy  | 92.64% |
-| Precision | 92.64% |
-| Recall    | 92.64% |
-| F1 Score  | 92.61% |
+- ResNet50 + Grad-CAM
+- Vision Transformer (ViT-B/16) + Attention Rollout
 
-## Confusion Matrix
-
-![CM](notebooks/resnet50_confusion_matrix.png)
-
-# Grad-CAM Explainability Analysis
-
-## A. Correct COVID Predictions
-
-| Sample         | Observation                                                                                                                                               |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| COVID Sample 1 | Grad-CAM strongly activates bilateral lower lung regions, indicating that the model is focusing on pulmonary infiltrates associated with COVID infection. |
-| COVID Sample 2 | Concentrated activations are visible around patchy opacities in the right lung, suggesting meaningful pathological localization.                          |
-| COVID Sample 3 | Heatmap highlights diffuse mid-lung abnormalities with minimal background activation, showing anatomically relevant attention.                            |
-| COVID Sample 4 | Model attention is localized around peripheral lung regions, consistent with common COVID radiographic manifestations.                                    |
-| COVID Sample 5 | Strong bilateral activation indicates the model successfully captured abnormal pulmonary textures instead of irrelevant structures.                       |
+developed as part of the **AIMS DTU Research Internship 2026 — Explainable Computer Vision Track**. :contentReference[oaicite:0]{index=0}
 
 ---
 
-## B. Correct Normal Predictions
+# Project Overview
 
-| Sample          | Observation                                                                                                              |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Normal Sample 1 | Activations are weak and diffuse with no concentrated pathological hotspots, indicating healthy lung interpretation.     |
-| Normal Sample 2 | Heatmap distribution is scattered uniformly across the chest without strong abnormal focus regions.                      |
-| Normal Sample 3 | Minimal activation inside lung fields suggests absence of disease-related features.                                      |
-| Normal Sample 4 | Model attention remains low-intensity and broadly distributed, which aligns with normal chest anatomy.                   |
-| Normal Sample 5 | No major localized saliency regions are observed, indicating the model correctly identifies non-pathological structures. |
+This project focuses on building interpretable deep learning models for medical image analysis using chest X-ray classification.
 
----
+Unlike conventional medical imaging projects that prioritize only classification accuracy, this work emphasizes:
 
-## C. Correct Viral Pneumonia Predictions
+- model transparency
+- saliency map analysis
+- explainability evaluation
+- CNN vs Transformer interpretability comparison
+- quantitative XAI benchmarking
 
-| Sample                   | Observation                                                                                                             |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| Viral Pneumonia Sample 1 | Grad-CAM highlights widespread inflammatory regions across both lungs, consistent with viral pneumonia characteristics. |
-| Viral Pneumonia Sample 2 | Strong activations are observed in dense pulmonary opacity regions, demonstrating pathology-focused attention.          |
-| Viral Pneumonia Sample 3 | Heatmap covers extensive lower lung areas, suggesting recognition of diffuse infection patterns.                        |
-| Viral Pneumonia Sample 4 | Model attention is concentrated around asymmetric infiltrates visible in the lung fields.                               |
-| Viral Pneumonia Sample 5 | Broad activation patterns indicate the model successfully captured pneumonia-associated radiographic abnormalities.     |
+The project investigates how different architectures reason while classifying:
+
+- COVID
+- Normal
+- Viral Pneumonia
+
+from chest X-ray images.
 
 ---
 
-# D. Misclassified Samples
+# Research Motivation
 
-| Actual          | Predicted       | Observation                                                                                                                     |
-| --------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| COVID           | Viral Pneumonia | Overlapping pulmonary opacities between COVID and viral pneumonia likely caused confusion due to similar radiographic patterns. |
-| COVID           | Normal          | Infection regions appear subtle with weak contrast, causing the model to miss disease-specific features.                        |
-| COVID           | Viral Pneumonia | Diffuse bilateral infiltrates resemble generalized viral pneumonia characteristics, leading to misclassification.               |
-| Normal          | COVID           | Noise and localized high activations may have falsely resembled pathological opacities.                                         |
-| Normal          | Viral Pneumonia | Minor imaging artifacts and texture irregularities possibly triggered abnormal feature detection.                               |
-| Viral Pneumonia | COVID           | Significant overlap exists between viral pneumonia inflammation and COVID infection patterns in chest X-rays.                   |
-| COVID           | Normal          | Grad-CAM shows weak pathological localization, indicating low-confidence feature extraction.                                    |
-| Normal          | COVID           | Bright regions outside primary lung structures may have influenced incorrect activation behavior.                               |
-| Viral Pneumonia | Normal          | Mild pneumonia manifestations may not have produced sufficiently strong discriminative features.                                |
-| COVID           | Viral Pneumonia | Attention maps focus on similar bilateral lung regions common to both respiratory diseases.                                     |
+Explainable Computer Vision aims to make deep learning models transparent and interpretable, especially in high-stakes domains such as healthcare where incorrect predictions may lead to serious consequences. :contentReference[oaicite:1]{index=1}
+
+Medical imaging systems must not only produce predictions, but also explain:
+
+- why a disease was predicted
+- which image regions influenced the prediction
+- whether the model focuses on clinically meaningful structures
+
+This project was developed to explore these explainability challenges through comparative saliency analysis between CNNs and Vision Transformers.
 
 ---
 
-# Overall Explainability Discussion
+# Dataset
 
-The Grad-CAM analysis demonstrated that the ResNet50 model generally focused on clinically relevant lung regions while making predictions. Correctly classified COVID and Viral Pneumonia samples showed concentrated activations around pulmonary infiltrates and opacity regions, whereas Normal samples exhibited weaker and more diffuse attention maps. Misclassified samples revealed significant overlap between COVID and Viral Pneumonia radiographic characteristics, highlighting the inherent difficulty of distinguishing respiratory infections using chest X-rays alone.
+Chest X-ray dataset containing:
 
-Several failure cases exhibited weak or dispersed activations, indicating that subtle pathological manifestations, low image contrast, and imaging artifacts contributed to incorrect predictions. Importantly, the Grad-CAM visualizations confirmed that the model primarily attended to anatomically meaningful lung structures instead of irrelevant background regions, supporting the reliability and interpretability of the classification pipeline.
+- COVID
+- Normal
+- Viral Pneumonia
+
+classes.
+
+## Preprocessing Pipeline
+
+- Images resized to **224×224**
+- CLAHE enhancement applied
+- Mild augmentation strategy
+- Mean/std normalization
+- Anatomically safe augmentations only
+
+### Normalization
+
+```python
+mean = (0.5159, 0.5159, 0.5159)
+std  = (0.2280, 0.2280, 0.2280)
+```
+
+### Important Design Choice
+
+Aggressive augmentations such as:
+
+- vertical flips
+- large rotations
+- excessive color jitter
+
+were intentionally avoided because they can distort anatomical structures in medical images.
 
 ---
 
-# Vision Transformer (ViT-B/16)
+# Models Used
 
-## Motivation
+## 1. ResNet50 (CNN)
 
-To extend the explainability analysis beyond CNN-based localization methods, a Vision Transformer (ViT-B/16) architecture was implemented for comparative transformer-based interpretability analysis.
+Transfer learning based CNN architecture using pretrained ResNet50.
 
-The primary objective was not only classification performance but also understanding how transformer attention mechanisms behave on medical imaging data.
+### Training Strategy
+
+- Pretrained ImageNet weights
+- Backbone frozen initially
+- Fully connected layer fine-tuned
+
+### Configuration
+
+| Parameter         | Value   |
+| ----------------- | ------- |
+| Optimizer         | Adam    |
+| Learning Rate     | 1e-3    |
+| Image Size        | 224×224 |
+| Epochs            | 10      |
+| Transfer Learning | Yes     |
+
+---
+
+## 2. Vision Transformer (ViT-B/16)
+
+Transformer-based architecture implemented for comparative explainability analysis.
+
+### Motivation
+
+The objective of using ViTs was to study:
+
+- transformer attention behavior
+- distributed contextual reasoning
+- transformer interpretability mechanisms
+
+in medical imaging systems.
 
 ---
 
 # ViT-B/16 Training Strategy
 
-Initially, full fine-tuning of the ViT-B/16 backbone was attempted. However, training proved computationally expensive on laptop GPU hardware.
+Initially, full fine-tuning was attempted but proved computationally expensive on laptop GPU hardware.
 
 Observed:
 
-- Approximately 1 hour for only 2 epochs
-- High GPU memory consumption
 - Slow convergence
+- High GPU memory consumption
+- Approximately 1 hour for only 2 epochs
 
-To improve computational efficiency while preserving explainability capability, the transformer backbone was frozen and only the classification head was trained.
+To improve efficiency, the backbone was frozen and only the classification head was trained.
 
 ```python
 for param in model.parameters():
@@ -106,55 +142,123 @@ for param in model.heads.parameters():
     param.requires_grad = True
 ```
 
----
+### Advantages
 
-# Why Freeze the Backbone?
-
-The frozen-backbone strategy was selected because the project primarily focuses on explainability analysis rather than maximizing benchmark accuracy.
-
-Advantages of this approach:
-
-- Reduced training time
-- Lower GPU memory consumption
-- Improved training stability
-- Reduced overfitting risk
-- Faster experimentation for explainability analysis
-- Preservation of pretrained ImageNet representations
+- Faster convergence
+- Reduced overfitting
+- Lower computational cost
+- Stable explainability experimentation
+- Preservation of pretrained representations
 
 ---
 
-# ViT-B/16 Configuration
+# Explainability Methods
 
-| Parameter         | Value   |
-| ----------------- | ------- |
-| Image Size        | 224×224 |
-| Optimizer         | Adam    |
-| Learning Rate     | 1e-3    |
-| Epochs            | 10      |
-| Backbone          | Frozen  |
-| Transfer Learning | Yes     |
+## Grad-CAM (CNN Explainability)
+
+Grad-CAM was applied on ResNet50 to visualize discriminative image regions responsible for predictions.
+
+The generated saliency maps demonstrated:
+
+- localized pulmonary attention
+- concentrated pathology-focused activations
+- clinically meaningful region localization
+
+---
+
+## Attention Rollout (Transformer Explainability)
+
+Attention Rollout was implemented for ViT-B/16 interpretability analysis.
+
+### Important Technical Challenge
+
+Torchvision ViT models do not expose attention weights directly in a usable format.
+
+To solve this, a custom attention module was implemented using:
+
+```python
+CustomMultiheadAttention
+```
+
+with:
+
+```python
+need_weights=True
+average_attn_weights=False
+```
+
+This allowed extraction of transformer attention maps for rollout computation.
+
+---
+
+# Explainability Evaluation Metrics
+
+The project evaluates saliency quality using multiple quantitative explainability metrics proposed in the internship assignment. :contentReference[oaicite:2]{index=2}
+
+## Metrics Used
+
+### 1. Entropy
+
+Measures saliency concentration vs diffusion.
+
+### 2. Insertion / Deletion Evaluation
+
+Measures prediction confidence changes when salient regions are inserted or removed.
+
+### 3. AOPC (Area Over Perturbation Curve)
+
+Measures confidence degradation after perturbing highly salient regions.
+
+---
+
+# Key Research Findings
+
+## CNN vs Transformer Explainability
+
+| CNN (Grad-CAM)                   | ViT (Attention Rollout)        |
+| -------------------------------- | ------------------------------ |
+| Localized reasoning              | Distributed reasoning          |
+| Focused saliency                 | Diffuse saliency               |
+| Strong perturbation sensitivity  | Smoother perturbation behavior |
+| Spatially concentrated attention | Contextual global attention    |
+
+---
+
+# Quantitative Results
+
+| Metric         | Grad-CAM | Attention Rollout |
+| -------------- | -------- | ----------------- |
+| Entropy        | Lower    | Higher            |
+| Deletion Drop  | Sharper  | Smoother          |
+| Insertion Rise | Sharper  | Smoother          |
+| AOPC           | Higher   | Lower             |
+
+---
+
+# ResNet50 Results
+
+| Metric    | Score  |
+| --------- | ------ |
+| Accuracy  | 92.64% |
+| Precision | 92.64% |
+| Recall    | 92.64% |
+| F1 Score  | 92.61% |
+
+---
+
+# ResNet50 Confusion Matrix
+
+![ResNet50 Confusion Matrix](notebooks/resnet50_confusion_matrix.png)
 
 ---
 
 # ViT-B/16 Results
 
-## Classification Report
-
-| Class           | Precision | Recall | F1-Score |
-| --------------- | --------- | ------ | -------- |
-| COVID           | 0.98      | 0.83   | 0.90     |
-| Normal          | 0.85      | 0.96   | 0.90     |
-| Viral Pneumonia | 0.98      | 0.99   | 0.99     |
-
----
-
-## Overall Metrics
-
-| Metric          | Score |
-| --------------- | ----- |
-| Accuracy        | 93%   |
-| Macro Avg F1    | 0.93  |
-| Weighted Avg F1 | 0.93  |
+| Metric      | Score |
+| ----------- | ----- |
+| Accuracy    | ~93%  |
+| Macro F1    | 0.93  |
+| Weighted F1 | 0.93  |
 
 ---
 
@@ -178,71 +282,47 @@ Advantages of this approach:
 
 ---
 
-# Comparative Insights
+# Explainability Observations
 
-## ResNet50 + Grad-CAM
+## Grad-CAM
 
-Strengths:
+Correctly classified COVID and Viral Pneumonia samples showed:
 
-- Strong spatial localization
-- Clear pulmonary attention regions
-- Computationally efficient
+- concentrated pulmonary activations
+- pathology-focused localization
+- limited background attention
 
-Limitations:
+Normal samples showed:
 
-- Limited global contextual understanding
-- Sensitive to overlapping respiratory patterns
-
----
-
-## ViT-B/16 + Attention Rollout
-
-Strengths:
-
-- Global attention modeling
-- Better contextual feature understanding
-- Transformer interpretability analysis
-
-Limitations:
-
-- Computationally expensive
-- Slower convergence
-- Requires larger datasets for optimal performance
+- weak diffuse activations
+- absence of pathological focus regions
 
 ---
 
-# Explainable AI Perspective
+## Attention Rollout
 
-The project evolved from a standard medical image classification pipeline into a research-oriented Explainable AI framework focused on understanding:
+Attention Rollout produced:
 
-- Model decision behavior
-- Failure cases
-- Attention mechanisms
-- CNN vs Transformer interpretability
+- globally distributed attention maps
+- smoother saliency transitions
+- context-aware activation behavior
 
-Rather than only maximizing classification accuracy, the project emphasizes understanding _why_ predictions are made.
+Unlike Grad-CAM, transformer explanations were more diffuse and less spatially concentrated.
 
 ---
 
-# Saved Outputs
+# Important Research Insight
 
-```text
-outputs/
-│
-├── gradcam/
-│
-├── vit/
-│   ├── best_vit_model.pth
-│   ├── final_vit_model.pth
-│   ├── vit_loss_curve.png
-│   ├── vit_accuracy_curve.png
-│   ├── vit_confusion_matrix.png
-│   ├── vit_metrics.json
-│   ├── vit_classification_report.txt
-│   ├── vit_predictions.csv
-│   ├── misclassified/
-│   └── attention_rollout/
-```
+One of the most significant findings of this project is:
+
+> Entropy alone is insufficient for evaluating transformer saliency quality.
+
+Perturbation-based metrics such as:
+
+- insertion/deletion
+- AOPC
+
+provided more meaningful explainability evaluation for Vision Transformers.
 
 ---
 
@@ -251,45 +331,137 @@ outputs/
 ```text
 project/
 │
+├── data/
+│
+├── preprocessing/
+│   ├── preprocessing.ipynb
+│   ├── preprocessing_config.json
+│   ├── augmentations.py
+│   ├── clahe_preprocessing.py
+│   └── dataset_split.py
+│
+├── models/
+│   ├── best_resnet50.pth
+│   ├── vit_b16.pth
+│   ├── resnet50_config.json
+│   └── vit_config.json
+│
 ├── notebooks/
 │   ├── EDA.ipynb
 │   ├── preprocessing.ipynb
-│   ├── resnet50_training.ipynb
-│   ├── gradcam_analysis.ipynb
-│   ├── vit_training.ipynb
+│   ├── ResNet50.ipynb
+│   ├── GradCAM.ipynb
+│   ├── ViT_B16.ipynb
 │   ├── attention_rollout.ipynb
 │   └── evaluation.ipynb
 │
 ├── outputs/
+│   ├── gradcam/
+│   └── vit/
 │
 ├── README.md
-│
 └── requirements.txt
 ```
 
 ---
 
-# Future Work
+# Hardware & Environment
 
-Planned improvements:
+| Component | Specification       |
+| --------- | ------------------- |
+| GPU       | RTX 4050 Laptop GPU |
+| CPU       | Ryzen 7 7435HS      |
+| Framework | PyTorch             |
+| OS        | Windows             |
 
-- Attention Rollout implementation
-- Quantitative explainability evaluation
-- Clinical relevance validation
-- Transformer attention comparison
-- Multi-label pathology classification
-- Research paper preparation
+### Important Windows Fix
+
+Using:
+
+```python
+num_workers > 0
+```
+
+caused DataLoader freezing on Windows.
+
+Stable solution:
+
+```python
+num_workers = 0
+```
 
 ---
 
-# Key Research Contribution
+# Requirements
 
-The major contribution of this work is the comparative explainability analysis between:
+```bash
+pip install -r requirements.txt
+```
 
-- CNN-based Grad-CAM visualizations
+---
+
+# Main Libraries
+
+- PyTorch
+- Torchvision
+- NumPy
+- OpenCV
+- Matplotlib
+- Scikit-learn
+- Pandas
+- Pillow
+
+---
+
+# Future Work
+
+Potential future improvements:
+
+- SHAP / LIME integration
+- Clinical saliency validation
+- Multi-label pathology classification
+- Statistical saliency evaluation
+- Transformer explainability optimization
+- Research paper publication
+
+---
+
+# Key Contribution
+
+The primary contribution of this work is the comparative explainability analysis between:
+
+- CNN-based Grad-CAM
   and
-- Transformer-based Attention Rollout methods
+- Transformer-based Attention Rollout
 
 for chest X-ray classification.
 
-The project demonstrates how Explainable AI techniques can help interpret deep learning behavior in medical imaging systems.
+The project demonstrates how Explainable AI techniques can help interpret deep learning behavior in medical imaging systems beyond standard accuracy metrics.
+
+---
+
+# Internship Context
+
+Developed for:
+
+**AIMS DTU Research Internship 2026**  
+**Explainable Computer Vision Track** :contentReference[oaicite:3]{index=3}
+
+The project fulfills the internship requirements of:
+
+- classification model development
+- explainability analysis
+- saliency evaluation
+- CNN/ViT comparison
+- quantitative XAI benchmarking
+
+---
+
+# Author
+
+Santanu Ojha
+
+B.Tech — Internet of Things  
+University School of Automation and Robotics
+
+---

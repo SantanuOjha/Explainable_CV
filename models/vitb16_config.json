@@ -1,0 +1,66 @@
+{
+    "architecture": "ViT-B/16",
+    "framework": "torchvision",
+    "pretrained": true,
+
+    "image_size": 224,
+    "patch_size": 16,
+    "num_classes": 3,
+
+    "classes": [
+        "COVID",
+        "Normal",
+        "Viral Pneumonia"
+    ],
+
+    "freeze_backbone": true,
+    "trainable_layers": [
+        "heads"
+    ],
+
+    "optimizer": {
+        "type": "Adam",
+        "learning_rate": 0.001
+    },
+
+    "loss_function": "CrossEntropyLoss",
+
+    "batch_size": 32,
+    "epochs": 10,
+
+    "input_normalization": {
+        "mean": [0.5159, 0.5159, 0.5159],
+        "std": [0.2280, 0.2280, 0.2280]
+    },
+
+    "augmentation_policy": {
+        "resize": [224, 224],
+        "horizontal_flip": true,
+        "rotation_degrees": 5,
+        "vertical_flip": false,
+        "color_jitter": false
+    },
+
+    "training_strategy": {
+        "description": "Backbone frozen initially, only classification head trained for faster convergence and reduced computational cost."
+    },
+
+    "hardware": {
+        "gpu": "RTX 4050 Laptop GPU",
+        "cpu": "Ryzen 7 7435HS"
+    },
+
+    "dataloader": {
+        "num_workers": 0,
+        "pin_memory": true
+    },
+
+    "evaluation_metrics": [
+        "accuracy",
+        "precision",
+        "recall",
+        "f1_score"
+    ],
+
+    "checkpoint_path": "../models/vit_b16.pth"
+}

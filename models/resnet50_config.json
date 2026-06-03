@@ -1,0 +1,73 @@
+{
+    "architecture": "ResNet50",
+    "framework": "torchvision",
+    "pretrained": true,
+
+    "image_size": 224,
+    "num_classes": 3,
+
+    "classes": [
+        "COVID",
+        "Normal",
+        "Viral Pneumonia"
+    ],
+
+    "freeze_backbone_initially": true,
+
+    "trainable_layers": [
+        "fc"
+    ],
+
+    "optimizer": {
+        "type": "Adam",
+        "learning_rate": 0.001
+    },
+
+    "loss_function": "CrossEntropyLoss",
+
+    "batch_size": 32,
+    "epochs": 10,
+
+    "input_normalization": {
+        "mean": [0.5159, 0.5159, 0.5159],
+        "std": [0.2280, 0.2280, 0.2280]
+    },
+
+    "augmentation_policy": {
+        "resize": [224, 224],
+        "horizontal_flip": true,
+        "rotation_degrees": 5,
+        "vertical_flip": false,
+        "color_jitter": false
+    },
+
+    "training_strategy": {
+        "description": "Initial backbone freezing with classifier fine-tuning for stable transfer learning on limited medical imaging data."
+    },
+
+    "hardware": {
+        "gpu": "RTX 4050 Laptop GPU",
+        "cpu": "Ryzen 7 7435HS"
+    },
+
+    "dataloader": {
+        "num_workers": 0,
+        "pin_memory": true
+    },
+
+    "evaluation_metrics": [
+        "accuracy",
+        "precision",
+        "recall",
+        "f1_score"
+    ],
+
+    "final_results": {
+        "accuracy": 0.9264,
+        "precision": 0.9264,
+        "recall": 0.9264,
+        "f1_score": 0.9261
+    },
+
+    "checkpoint_path": "../models/best_resnet50.pth"
+}
