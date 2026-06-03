@@ -5,7 +5,7 @@ A comparative Explainable AI (XAI) framework for chest X-ray classification usin
 - ResNet50 + Grad-CAM
 - Vision Transformer (ViT-B/16) + Attention Rollout
 
-developed as part of the **AIMS DTU Research Internship 2026 — Explainable Computer Vision Track**. :contentReference[oaicite:0]{index=0}
+developed as part of the **AIMS DTU Research Internship 2026 — Explainable Computer Vision Track**.
 
 ---
 
@@ -55,7 +55,9 @@ Chest X-ray dataset containing:
 
 classes.
 
-## Preprocessing Pipeline
+---
+
+# Preprocessing Pipeline
 
 - Images resized to **224×224**
 - CLAHE enhancement applied
@@ -63,14 +65,14 @@ classes.
 - Mean/std normalization
 - Anatomically safe augmentations only
 
-### Normalization
+## Normalization
 
 ```python
 mean = (0.5159, 0.5159, 0.5159)
 std  = (0.2280, 0.2280, 0.2280)
 ```
 
-### Important Design Choice
+## Important Design Choice
 
 Aggressive augmentations such as:
 
@@ -84,17 +86,17 @@ were intentionally avoided because they can distort anatomical structures in med
 
 # Models Used
 
-## 1. ResNet50 (CNN)
+# 1. ResNet50 (CNN)
 
 Transfer learning based CNN architecture using pretrained ResNet50.
 
-### Training Strategy
+## Training Strategy
 
 - Pretrained ImageNet weights
 - Backbone frozen initially
 - Fully connected layer fine-tuned
 
-### Configuration
+## Configuration
 
 | Parameter         | Value   |
 | ----------------- | ------- |
@@ -106,11 +108,11 @@ Transfer learning based CNN architecture using pretrained ResNet50.
 
 ---
 
-## 2. Vision Transformer (ViT-B/16)
+# 2. Vision Transformer (ViT-B/16)
 
 Transformer-based architecture implemented for comparative explainability analysis.
 
-### Motivation
+## Motivation
 
 The objective of using ViTs was to study:
 
@@ -142,7 +144,7 @@ for param in model.heads.parameters():
     param.requires_grad = True
 ```
 
-### Advantages
+## Advantages
 
 - Faster convergence
 - Reduced overfitting
@@ -154,7 +156,7 @@ for param in model.heads.parameters():
 
 # Explainability Methods
 
-## Grad-CAM (CNN Explainability)
+# Grad-CAM (CNN Explainability)
 
 Grad-CAM was applied on ResNet50 to visualize discriminative image regions responsible for predictions.
 
@@ -166,11 +168,17 @@ The generated saliency maps demonstrated:
 
 ---
 
-## Attention Rollout (Transformer Explainability)
+# Example Grad-CAM Visualization
+
+![GradCAM Example](outputs/gradcam/gradcam_example.png)
+
+---
+
+# Attention Rollout (Transformer Explainability)
 
 Attention Rollout was implemented for ViT-B/16 interpretability analysis.
 
-### Important Technical Challenge
+## Important Technical Challenge
 
 Torchvision ViT models do not expose attention weights directly in a usable format.
 
@@ -191,9 +199,15 @@ This allowed extraction of transformer attention maps for rollout computation.
 
 ---
 
+# Example Attention Rollout Visualization
+
+![Attention Rollout](outputs/vit/attention_rollout.png)
+
+---
+
 # Explainability Evaluation Metrics
 
-The project evaluates saliency quality using multiple quantitative explainability metrics proposed in the internship assignment.
+The project evaluates saliency quality using multiple quantitative explainability metrics.
 
 ## Metrics Used
 
@@ -248,7 +262,7 @@ Measures confidence degradation after perturbing highly salient regions.
 
 # ResNet50 Confusion Matrix
 
-![ResNet50 Confusion Matrix](notebooks/resnet50_confusion_matrix.png)
+![ResNet50 Confusion Matrix](outputs/resnet50_confusion_matrix.png)
 
 ---
 
@@ -279,6 +293,48 @@ Measures confidence degradation after perturbing highly salient regions.
 # ViT Confusion Matrix
 
 ![ViT Confusion Matrix](outputs/vit/vit_confusion_matrix.png)
+
+---
+
+# Insertion Evaluation
+
+Insertion evaluation measures how rapidly prediction confidence increases when the most salient image regions are gradually inserted into the input image.
+
+A steeper confidence increase indicates that the saliency map correctly identifies highly informative regions.
+
+---
+
+# Insertion Curve
+
+![Insertion Curve](outputs/comparisons/insertion_curve.png)
+
+---
+
+# Deletion Evaluation
+
+Deletion evaluation measures how rapidly prediction confidence decreases when the most salient regions are progressively removed from the image.
+
+A sharper confidence drop indicates stronger dependence on highlighted salient regions.
+
+---
+
+# Deletion Curve
+
+![Deletion Curve](outputs/comparisons/deletion_curve.png)
+
+---
+
+# AOPC Evaluation
+
+AOPC (Area Over the Perturbation Curve) quantitatively measures confidence degradation caused by perturbing salient regions.
+
+Higher AOPC values indicate stronger and more meaningful saliency localization.
+
+---
+
+# AOPC Comparison
+
+![AOPC Comparison](outputs/comparisons/aopc_comparison.png)
 
 ---
 
@@ -357,7 +413,8 @@ project/
 │
 ├── outputs/
 │   ├── gradcam/
-│   └── vit/
+│   ├── vit/
+│   └── comparisons/
 │
 ├── README.md
 └── requirements.txt
@@ -374,7 +431,7 @@ project/
 | Framework | PyTorch             |
 | OS        | Windows             |
 
-### Important Windows Fix
+## Important Windows Fix
 
 Using:
 
@@ -440,21 +497,6 @@ The project demonstrates how Explainable AI techniques can help interpret deep l
 
 ---
 
-# Internship Context
-
-Developed for:
-
-**AIMS DTU Research Internship 2026**  
-**Explainable Computer Vision Track**
-
-The project fulfills the internship requirements of:
-
-- classification model development
-- explainability analysis
-- saliency evaluation
-- CNN/ViT comparison
-- quantitative XAI benchmarking
-
 ---
 
 # Author
@@ -463,5 +505,3 @@ Santanu Ojha
 
 B.Tech — Internet of Things  
 University School of Automation and Robotics
-
----
